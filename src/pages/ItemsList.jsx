@@ -1,7 +1,21 @@
+import { useEffect, useState } from 'react'
 import ItemCard from '../components/ItemCard'
+import { api } from "../api/api"
 
 const ItemsList = () => {
-    const items = []
+    const [items, setItems] = useState([])
+
+    useEffect (() => {
+        async function loadItems() {
+        try {
+            const data = await api.getItems()
+            setItems(data.data) 
+        } catch (error) {
+            console.error(error)
+        }
+        }
+        loadItems()
+    }, [])
 
     return (
         <div className="container">
