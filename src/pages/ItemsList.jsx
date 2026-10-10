@@ -1,20 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import ItemCard from '../components/ItemCard'
-import { api } from "../api/api"
+import { useItemStore } from '../store/useItemStore'
 
 const ItemsList = () => {
-    const [items, setItems] = useState([])
+    const {items, getItems} = useItemStore()
 
     useEffect (() => {
-        async function loadItems() {
-        try {
-            const data = await api.getItems()
-            setItems(data.data) 
-        } catch (error) {
-            console.error(error)
-        }
-        }
-        loadItems()
+        getItems()
     }, [])
 
     return (
