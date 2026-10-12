@@ -1,8 +1,9 @@
+import ItemsList from "./ItemsList"
 
 const MyBids = () => {
     return (
         <div className="container">
-
+            <ItemsList showOwn ={true} />
             <div class="page-header">
                 <h1>Мои ставки</h1>
                 <p class="page-subtitle">История ваших ставок на товары</p>
@@ -116,8 +117,6 @@ const MyBids = () => {
                     </div>
                 </div>
             </div>
-
-
         </div>
     )
 }

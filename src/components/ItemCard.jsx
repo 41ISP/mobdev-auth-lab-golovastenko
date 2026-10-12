@@ -1,3 +1,6 @@
+import { useItemStore } from "../store/useItemStore"
+import { useUserStore } from "../store/useUserStore"
+
 const ItemCard = ({
     status,
     title,
@@ -8,6 +11,10 @@ const ItemCard = ({
     highestBid,
     imageUrl,
 }) => {
+    const { session } = useUserStore()
+    const { getItems } = useItemStore()
+    
+
     return (
         <div className="item-card">
             <img src={imageUrl} class="item-image" />

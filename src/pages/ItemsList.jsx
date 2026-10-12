@@ -1,12 +1,36 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ItemCard from '../components/ItemCard'
 import { useItemStore } from '../store/useItemStore'
+import { useUserStore } from '../store/useUserStore'
 
-const ItemsList = () => {
+const ItemsList = ({showOwn = false}) => {
     const {items, getItems} = useItemStore()
+    const {session} = useUserStore()
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(null)
+    const [timerId, setTimerId] = useState(undefined)
 
     useEffect (() => {
-        getItems()
+        const load = async () => {
+            setIsLoading(true)
+            try{    
+                await getItems()
+            } catch (error) {
+                console.error(error)
+                setError(error.message || "Что-то пошло не так")
+            } finally {
+                setIsLoading(false)
+            }
+        }
+        load()
+        setTimerId(setInterval(() => {
+            try {
+                getMessages()
+            } catch (error) {}
+        }, 10000))
+        return () => {
+            clearInterval(timerId)
+        }
     }, [])
 
     return (
@@ -32,12 +56,19 @@ const ItemsList = () => {
                     <span class="stat-label">Средняя цена</span>
                 </div>
             </div>
-
+            {isLoading && <p>Загрузка</p>}
+            {!isLoading && error && <p>{error}</p>}
+            {!isLoading && !error && items && (
             <div class="items-grid">
-                {items.map((item, i) => (
+                {showOwn ? items.filter(el => el.userId === session?.user.id).map((item, i) => 
+                (
+                    <ItemCard key={i} {...item} />
+                ))
+                : items.map((item, i) => (
                     <ItemCard key={i} {...item} />
                 ))}
             </div>
+            )}
         </div>
     )
 }

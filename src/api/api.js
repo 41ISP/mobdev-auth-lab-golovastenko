@@ -39,9 +39,45 @@ const sendItems = async (item) => {
     return res
 }
 
+const getBids = async (id) => {
+    const res = await apiInstance.get(`/items/${id}/bids`)
+    return res
+}
+
+const getStats = async () => {
+    const res = await apiInstance.get(`/stats`)
+    return res
+}
+
+const authMe = async () => {
+    const res = await apiInstance.get("/auth/me")
+    return res
+}
+
+const deleteItem = async (id) => {
+    const res = await apiInstance.delete(`/items/${id}`)
+    return res
+}
+
+const sendBid = async (id) => {
+    const res = await apiInstance.post(`/items/${id}/bids`)
+    return res
+}
+
+const getMyBids = async () => {
+    const res = await apiInstance.get(`/bids/my`)
+    return res
+}
+
 export const api = {
     registerUser,
     loginUser,
     getItems,
-    sendItems
+    sendItems,
+    getBids,
+    getStats,
+    authMe,
+    deleteItem,
+    sendBid,
+    getMyBids
 }

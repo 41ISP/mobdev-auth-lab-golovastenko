@@ -5,6 +5,8 @@ import { useUserStore } from '../store/useUserStore'
 const Logout = () => {
     const navigate = useNavigate()
     const {clearSession} = useUserStore()
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(null)
     useEffect(() => {
         clearSession()
         navigate('/')
