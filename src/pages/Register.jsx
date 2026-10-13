@@ -24,6 +24,7 @@ const Register = () => {
             email: e.target.email.value,
             password: e.target.password.value,
         }
+        if (e.target.email.value.length > 0) user.email = e.target.email.value
 
         try {
             const data = await api.registerUser(user)
@@ -38,16 +39,12 @@ const Register = () => {
     return (
         <div className="container">
             <div class="auth-container">
+                {error && <div className="alert alert-error active">{error}</div>}
                 <div class="auth-header">
                     <div class="auth-icon">👤</div>
                     <h1 class="auth-title">Регистрация</h1>
                     <p class="auth-subtitle">Создайте новый аккаунт</p>
                 </div>
-
-                <div class="alert alert-error" id="error-alert">
-                    Такое имя пользователя уже занято
-                </div>
-                {error.length > 0 && <div className="auth-error">{error}</div>}
                 <form id="register-form" onSubmit={handleSubmit}>
                     <div class="form-group">
                         <label class="form-label">Имя пользователя</label>
@@ -119,9 +116,7 @@ const Register = () => {
                         Зарегистрироваться
                     </Button>
                 </form>
-
                 <div class="auth-divider">или</div>
-
                 <div class="auth-link">
                     <p>
                         <Link to={'/login'}>Войти</Link>

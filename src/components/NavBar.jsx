@@ -26,6 +26,9 @@ const NavBar = () => {
                                         <Link to={'/create-item'}>Создать товар</Link>
                                     </li>
                                     <li>
+                                        <Link to={'/bids'}>Мои ставки</Link>
+                                    </li>
+                                    <li>
                                         <Link to={'/logout'}>Выйти</Link>
                                     </li>
                                 </>
