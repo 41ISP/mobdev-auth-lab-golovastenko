@@ -1,24 +1,31 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Input from './Input'
 import { api } from '../api/api'
+import { useState } from 'react'
+import { useItemStore } from '../store/useItemStore'
 
 const CreateItem = () => {
     const navigate = useNavigate()
+    const [error, setError] = useState("")
+    const {getItems} = useItemStore()
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setError("")
 
         const item = {
             title: e.target.title.value,
             description: e.target.description.value,
-            price: e.target.price.value,
-            imageUrl: e.target.imageUrl.value
+            price: Number(e.target.price.value),
         }
+        if (e.target.imageUrl.value.length > 0) item.imageUrl = e.target.imageUrl.value
 
         try {
             await api.sendItems(item)
+            await getItems()
             navigate("/")
         } catch (error) {
             console.error(error)
+            setError(error.response.data.error)
         }
     }
     return (
@@ -28,6 +35,7 @@ const CreateItem = () => {
             </div>
 
             <div class="form-container">
+                {error && <div className="alert alert-error active">{error}</div>}
                 <form id="create-item-form" onSubmit={handleSubmit}>
                     <div class="form-group">
                         <label class="form-label">
@@ -103,7 +111,7 @@ const CreateItem = () => {
                     </div>
 
                     <div class="form-actions">
-                        <Link href="/" class="btn-cancel">
+                        <Link to="/" class="btn-cancel">
                             Отмена
                         </Link>
                         <button type="submit" class="btn-submit">

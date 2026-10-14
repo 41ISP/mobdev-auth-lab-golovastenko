@@ -1,9 +1,37 @@
-import ItemsList from "./ItemsList"
+import { useEffect, useState } from "react"
+import { api } from "../api/api"
 
 const MyBids = () => {
+    const [bids, setBids] = useState([])
+    const [timerId, setTimerId] = useState(undefined)
+
+    useEffect(() => {
+        const load = async () => {
+            try{
+                const res = await api.getMyBids()
+                const data = res?.data ?? res
+                const bidsList = Array.isArray(data) ? data : data?.bids
+
+                setBids(Array.isArray(bidsList) ? bidsList : [])
+            } catch (error) {
+                console.error(error)
+                setError(error.message || "Что-то пошло не так")
+                setBids([])
+            }
+        }
+        load()
+        setTimerId(setInterval(async () => {
+            try {
+                api.getMyBids()
+            } catch (error) { }
+        }, 10000))
+        return () => {
+            clearInterval(timerId)
+        }
+    }, [])
+
     return (
         <div className="container">
-            <ItemsList showOwn ={true} />
             <div class="page-header">
                 <h1>Мои ставки</h1>
                 <p class="page-subtitle">История ваших ставок на товары</p>
@@ -11,15 +39,15 @@ const MyBids = () => {
 
             <div class="bids-summary">
                 <div class="summary-card">
-                    <span class="summary-value">8</span>
+                    <span class="summary-value">{bids.length}</span>
                     <span class="summary-label">Всего ставок</span>
                 </div>
                 <div class="summary-card winning">
-                    <span class="summary-value">3</span>
+                    <span class="summary-value">{}</span>
                     <span class="summary-label">Лидирующих ставок</span>
                 </div>
                 <div class="summary-card">
-                    <span class="summary-value">185 000 ₽</span>
+                    <span class="summary-value">{} ₽</span>
                     <span class="summary-label">Общая сумма</span>
                 </div>
             </div>
